@@ -1,0 +1,318 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Owl Letter</title>
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+
+        body {
+            min-height: 100vh;
+            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            font-family: 'Georgia', serif;
+            overflow: hidden;
+        }
+
+        .scene {
+            position: relative;
+            width: 100%;
+            height: 100vh;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+        }
+
+        .owl-container {
+            position: relative;
+            z-index: 10;
+        }
+
+        .owl {
+            width: 200px;
+            height: 200px;
+            position: relative;
+            animation: float 3s ease-in-out infinite;
+        }
+
+        @keyframes float {
+            0%, 100% { transform: translateY(0px); }
+            50% { transform: translateY(-20px); }
+        }
+
+        .owl-body {
+            width: 120px;
+            height: 140px;
+            background: #8B4513;
+            border-radius: 50% 50% 45% 45%;
+            position: absolute;
+            left: 40px;
+            top: 30px;
+        }
+
+        .owl-head {
+            width: 100px;
+            height: 80px;
+            background: #A0522D;
+            border-radius: 50%;
+            position: absolute;
+            left: 50px;
+            top: 10px;
+        }
+
+        .ear {
+            width: 0;
+            height: 0;
+            border-left: 15px solid transparent;
+            border-right: 15px solid transparent;
+            border-bottom: 30px solid #8B4513;
+            position: absolute;
+            top: -5px;
+        }
+
+        .ear.left { left: 10px; }
+        .ear.right { right: 10px; }
+
+        .eye {
+            width: 30px;
+            height: 30px;
+            background: white;
+            border-radius: 50%;
+            position: absolute;
+            top: 30px;
+        }
+
+        .eye.left { left: 20px; }
+        .eye.right { right: 20px; }
+
+        .pupil {
+            width: 12px;
+            height: 12px;
+            background: #000;
+            border-radius: 50%;
+            position: absolute;
+            top: 9px;
+            left: 9px;
+        }
+
+        .beak {
+            width: 0;
+            height: 0;
+            border-left: 10px solid transparent;
+            border-right: 10px solid transparent;
+            border-top: 15px solid #FF8C00;
+            position: absolute;
+            bottom: 15px;
+            left: 40px;
+        }
+
+        .wing {
+            width: 40px;
+            height: 60px;
+            background: #A0522D;
+            border-radius: 50%;
+            position: absolute;
+            top: 80px;
+        }
+
+        .wing.left {
+            left: 20px;
+            transform: rotate(-20deg);
+        }
+
+        .wing.right {
+            right: 20px;
+            transform: rotate(20deg);
+        }
+
+        .letter {
+            width: 80px;
+            height: 60px;
+            background: #F5E6D3;
+            border: 3px solid #D4A574;
+            border-radius: 5px;
+            position: absolute;
+            bottom: 0;
+            left: 60px;
+            cursor: pointer;
+            transition: transform 0.3s ease, box-shadow 0.3s ease;
+            box-shadow: 0 5px 15px rgba(0,0,0,0.3);
+        }
+
+        .letter:hover {
+            transform: scale(1.1);
+            box-shadow: 0 8px 25px rgba(0,0,0,0.4);
+        }
+
+        .letter::before {
+            content: '';
+            position: absolute;
+            width: 100%;
+            height: 2px;
+            background: #D4A574;
+            top: 50%;
+            left: 0;
+        }
+
+        .letter::after {
+            content: '';
+            position: absolute;
+            width: 2px;
+            height: 100%;
+            background: #D4A574;
+            left: 50%;
+            top: 0;
+        }
+
+        .letter-content {
+            display: none;
+            position: fixed;
+            top: 50%;
+            left: 50%;
+            transform: translate(-50%, -50%) scale(0);
+            width: 90%;
+            max-width: 500px;
+            background: #FFF8DC;
+            border: 5px solid #D4A574;
+            border-radius: 10px;
+            padding: 40px;
+            box-shadow: 0 20px 60px rgba(0,0,0,0.5);
+            z-index: 1000;
+            animation: openLetter 0.5s ease forwards;
+        }
+
+        .letter-content.show {
+            display: block;
+        }
+
+        @keyframes openLetter {
+            to {
+                transform: translate(-50%, -50%) scale(1);
+            }
+        }
+
+        .letter-content p {
+            font-size: 18px;
+            line-height: 1.8;
+            color: #333;
+            margin-bottom: 15px;
+        }
+
+        .close-btn {
+            position: absolute;
+            top: 15px;
+            right: 15px;
+            width: 30px;
+            height: 30px;
+            background: #D4A574;
+            border: none;
+            border-radius: 50%;
+            cursor: pointer;
+            font-size: 20px;
+            color: white;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            transition: background 0.3s ease;
+        }
+
+        .close-btn:hover {
+            background: #B8956A;
+        }
+
+        .overlay {
+            display: none;
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            background: rgba(0,0,0,0.7);
+            z-index: 999;
+        }
+
+        .overlay.show {
+            display: block;
+        }
+
+        .stars {
+            position: absolute;
+            width: 100%;
+            height: 100%;
+        }
+
+        .star {
+            position: absolute;
+            width: 2px;
+            height: 2px;
+            background: white;
+            border-radius: 50%;
+            animation: twinkle 3s infinite;
+        }
+
+        @keyframes twinkle {
+            0%, 100% { opacity: 0.3; }
+            50% { opacity: 1; }
+        }
+    </style>
+</head>
+<body>
+    <div class="stars" id="stars"></div>
+    
+    <div class="scene">
+        <div class="owl-container">
+            <img src="owl.png" alt="Owl with letter" class="owl-image" id="letter">
+        </div>
+    </div>
+
+    <div class="overlay" id="overlay"></div>
+    
+    <div class="letter-content" id="letterContent">
+        <button class="close-btn" id="closeBtn">×</button>
+        <p>Hello Gel,</p>
+        <p>It's been a while. How are you doing?</p>
+        <p>It's been a bad, really bad encounter we've been through the earthquakes and the typhoons. Hopefully you are safe and doing great.</p>
+    </div>
+
+    <script>
+        // Create stars
+        const starsContainer = document.getElementById('stars');
+        for (let i = 0; i < 50; i++) {
+            const star = document.createElement('div');
+            star.className = 'star';
+            star.style.left = Math.random() * 100 + '%';
+            star.style.top = Math.random() * 100 + '%';
+            star.style.animationDelay = Math.random() * 3 + 's';
+            starsContainer.appendChild(star);
+        }
+
+        // Letter interaction
+        const letter = document.getElementById('letter');
+        const letterContent = document.getElementById('letterContent');
+        const overlay = document.getElementById('overlay');
+        const closeBtn = document.getElementById('closeBtn');
+
+        letter.addEventListener('click', function() {
+            letterContent.classList.add('show');
+            overlay.classList.add('show');
+        });
+
+        closeBtn.addEventListener('click', function() {
+            letterContent.classList.remove('show');
+            overlay.classList.remove('show');
+        });
+
+        overlay.addEventListener('click', function() {
+            letterContent.classList.remove('show');
+            overlay.classList.remove('show');
+        });
+    </script>
+</body>
+</html>
